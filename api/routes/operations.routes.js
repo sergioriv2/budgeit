@@ -15,10 +15,6 @@ router.post(
   "/",
   [
     validateJWT,
-    check("user_uid", `'user_uid' field is required.`)
-      .notEmpty()
-      .isInt()
-      .withMessage(`'user_uid' must be a number.`),
     check("type_uid", `'type_uid' field is required.`)
       .notEmpty()
       .isInt()
@@ -36,7 +32,18 @@ router.post(
 
 // GET
 
-router.get("/user/:user_uid", getOperations);
+router.get(
+  "/user/:user_uid",
+  [
+    validateJWT,
+    check("user_uid", `'user_uid' field is required.`)
+      .notEmpty()
+      .isInt()
+      .withMessage(`'user_uid' must be a number.`),
+    validateFields,
+  ],
+  getOperations
+);
 
 // PUT
 

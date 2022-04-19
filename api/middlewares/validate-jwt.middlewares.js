@@ -14,7 +14,7 @@ const validateJWT = async (req = request, res = response, next) => {
     const { uid } = jwt.verify(token, process.env.SECRETORPRIVATEKEY);
 
     //Verifico si el usuario existe
-    const user = User.getUserById({ uid });
+    const user = await User.getUserById({ uid });
     if (!user) {
       return res.status(401).json({ msg: "Invalid token" });
     }

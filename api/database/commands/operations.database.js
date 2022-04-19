@@ -3,7 +3,7 @@ const sql = require("../connection.database");
 const cmdGetOperationsPaginated = (params) => {
   const { user, offset, limit } = params;
   return new Promise((resolve, reject) => {
-    // Due to limitations in the the free mysql database host provider, need to write the query in the source code.
+    // Due to limitations in the the free mysql database host provider, I need to write the query in the source code.
     sql.query(
       `
       SELECT Operations.ID_Operation as 'uid', Operation_Types.Desc_Operation_Type as 'type', Categories.Desc_Category as 'category', Operations.Amount_Operation as 'amount', Operations.Date_Operation as date

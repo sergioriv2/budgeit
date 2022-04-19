@@ -4,12 +4,9 @@ const Operation = require("../models/operations.models");
 
 const postOperation = async (req = request, res = response) => {
   try {
-    const {
-      user_uid: user,
-      type_uid: type,
-      category_uid: category,
-      amount,
-    } = req.body;
+    const { type_uid: type, category_uid: category, amount } = req.body;
+
+    const { uid: user } = req.user;
 
     const newOperation = new Operation({ user, type, category, amount });
 
