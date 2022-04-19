@@ -11,6 +11,7 @@ class Server {
       users: "/api/users",
       budgets: "/api/budgets",
       operations: "/api/operations",
+      categories: "/api/categories",
     };
 
     // DDBB Connection
@@ -37,6 +38,12 @@ class Server {
     this.app.use(
       this.endpoint.operations,
       require("../routes/operations.routes")
+    );
+
+    // Endpoints to categories
+    this.app.use(
+      this.endpoint.categories,
+      require("../routes/categories.routes")
     );
   }
 
