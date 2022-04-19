@@ -7,9 +7,10 @@ const Operation = function (operation) {
   this.uid = operation.uid;
   this.type = operation.type;
   this.user = operation.user;
+  this.description = operation.description;
   this.category = operation.category || 16; // 16 is the uid for the "other" category
   this.amount = operation.amount;
-  this.date = Date.now();
+  this.date = operation.date || Date.now();
 };
 
 Operation.postOperation = async (operation) => {

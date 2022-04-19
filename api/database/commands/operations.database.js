@@ -31,11 +31,11 @@ const cmdGetOperationsPaginated = (params) => {
 };
 
 const cmdPostOperation = (params) => {
-  const { user, type, category, amount, date } = params;
+  const { user, type, category, amount, description, date } = params;
   return new Promise((resolve, reject) => {
     sql.query(
-      "CALL spPostOperation(?, ?, ?, ?, ?)",
-      [user, type, category, amount, new Date(date)],
+      "CALL spPostOperation(?, ?, ?, ?, ?, ?)",
+      [user, type, category, amount, description, new Date(date)],
       (err, res) => {
         try {
           if (err) {

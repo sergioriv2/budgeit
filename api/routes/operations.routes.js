@@ -19,6 +19,14 @@ router.post(
       .notEmpty()
       .isInt()
       .withMessage(`'type_uid' must be a number.`),
+    check("description", `'description' field is required.`)
+      .notEmpty()
+      .isString()
+      .withMessage(`'description' must be a string.`),
+    check("date", `'date' field is required.`)
+      .notEmpty()
+      .isDate()
+      .withMessage(`'description' must be a date.`),
     check("category_uid", `'category_uid' must be a number.`)
       .isInt()
       .optional({ nullable: true }),
