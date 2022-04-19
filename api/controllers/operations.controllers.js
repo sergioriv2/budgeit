@@ -25,7 +25,7 @@ const postOperation = async (req = request, res = response) => {
 
 const getOperations = async (req = request, res = response) => {
   try {
-    const { user_uid: user } = req.params;
+    const { uid: user } = req.user;
 
     const { offset = 0, limit = 10 } = req.query;
 

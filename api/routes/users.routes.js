@@ -13,15 +13,7 @@ const {
 
 // GET
 
-router.get(
-  "/:user_uid/budget",
-  [
-    validateJWT,
-    check("user_uid", "User UID is required").notEmpty(),
-    validateFields,
-  ],
-  getBudgetUser
-);
+router.get("/budget", [validateJWT], getBudgetUser);
 
 // POST
 
@@ -30,7 +22,6 @@ router.post("/signin", signIn);
 router.post(
   "/",
   [
-    validateJWT,
     check("email", "Email field is required")
       .notEmpty()
       .isEmail()

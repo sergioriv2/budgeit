@@ -32,18 +32,7 @@ router.post(
 
 // GET
 
-router.get(
-  "/user/:user_uid",
-  [
-    validateJWT,
-    check("user_uid", `'user_uid' field is required.`)
-      .notEmpty()
-      .isInt()
-      .withMessage(`'user_uid' must be a number.`),
-    validateFields,
-  ],
-  getOperations
-);
+router.get("/", [validateJWT], getOperations);
 
 // PUT
 

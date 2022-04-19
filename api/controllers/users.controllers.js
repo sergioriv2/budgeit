@@ -5,11 +5,7 @@ const { generateJWT } = require("../helpers/generateJWT.helpers");
 
 const getBudgetUser = async (req = request, res = response) => {
   try {
-    const { user_uid: user } = req.params;
-
-    // Check if the requesting user is the same as the requested user's budget
-    if (parseInt(user, 10) !== req.user.uid)
-      return res.status(401).json({ msg: "Unauthorized." });
+    const { uid: user } = req.user;
 
     const result = await User.getTotalBudget({ user: parseInt(user, 10) });
 
