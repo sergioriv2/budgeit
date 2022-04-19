@@ -44,7 +44,7 @@ const spGetUserBudget = (params) => {
           return;
         }
 
-        resolve(res);
+        resolve(res[0]);
       } catch (err) {
         reject(err);
       }
