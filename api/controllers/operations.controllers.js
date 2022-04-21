@@ -10,8 +10,6 @@ const deleteOperation = async (req = request, res = result) => {
       uid,
     });
 
-    console.log(result);
-
     if (!result) return res.status(502).json({ msg: "Internal server error." });
 
     return res
@@ -71,7 +69,16 @@ const getOperations = async (req = request, res = response) => {
 
     if (!result) return res.status(502).json({ msg: "Internal server error." });
 
-    return res.status(200).json({ ok: true, result });
+    const formatedResult = result.map((element) => {
+      const { category, category_uid, type, type_uid, ...restData } = element;
+      return {
+        category: { description: category, uid: category_uid },
+        type: { description: type, uid: type_uid },
+        ...restData,
+      };
+    });
+
+    return res.status(200).json({ ok: true, result: formatedResult });
   } catch (err) {
     console.log(err);
     res.status(500).json({ msg: "Internal server error." });
