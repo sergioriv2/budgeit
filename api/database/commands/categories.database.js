@@ -1,19 +1,16 @@
-const sql = require("../connection.database");
+const connection = require("../connection.database");
+// const sql = require("mssql");
 
 const spGetCategories = () => {
   return new Promise((resolve, reject) => {
-    sql.query("CALL spGetCategories()", (err, res) => {
-      try {
-        if (err) {
-          reject(err);
-          return;
-        }
-
-        resolve(res[0]);
-      } catch (err) {
+    connection()
+      .then(async (pool) => {
+        const { recordset } = await pool.request().execute("spGetCategories");
+        resolve(recordset);
+      })
+      .catch((err) => {
         reject(err);
-      }
-    });
+      });
   });
 };
 

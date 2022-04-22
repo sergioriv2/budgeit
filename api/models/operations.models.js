@@ -1,8 +1,9 @@
 const {
   cmdPostOperation,
-  cmdGetOperationsPaginated,
+  spGetOperations,
   spPutOperation,
   spDeleteOperation,
+  spGetFilteredOperations,
 } = require("../database/commands/operations.database");
 
 const Operation = function (operation) {
@@ -17,9 +18,9 @@ const Operation = function (operation) {
 
 Operation.postOperation = async (operation) => {
   try {
-    const { affectedRows } = await cmdPostOperation(operation);
+    const result = await cmdPostOperation(operation);
 
-    return affectedRows === 1 ? true : false;
+    return result === 1 ? true : false;
   } catch (err) {
     throw new Error(err);
   }
@@ -37,8 +38,17 @@ Operation.deleteOperation = async (operation) => {
 
 Operation.getOperations = async (params) => {
   try {
-    const result = await cmdGetOperationsPaginated(params);
-    return result;
+    const result = await spGetOperations(params);
+    return result || [];
+  } catch (err) {
+    throw new Error(err);
+  }
+};
+
+Operation.getFilteredOperations = async (params) => {
+  try {
+    const result = await spGetFilteredOperations(params);
+    return result || [];
   } catch (err) {
     throw new Error(err);
   }
@@ -46,8 +56,8 @@ Operation.getOperations = async (params) => {
 
 Operation.putOperation = async (params) => {
   try {
-    const { affectedRows } = await spPutOperation(params);
-    return affectedRows === 1 ? true : false;
+    const result = await spPutOperation(params);
+    return result === 1 ? true : false;
   } catch (err) {
     throw new Error(err);
   }

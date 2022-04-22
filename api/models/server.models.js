@@ -48,16 +48,24 @@ class Server {
   }
 
   connectionDB() {
-    try {
-      database.connect((error) => {
-        if (error) {
-          throw error;
-        }
+    database()
+      .then(() => {
         console.log("Successful connection with database.");
+      })
+      .catch((err) => {
+        console.log(err);
       });
-    } catch (err) {
-      console.log(err);
-    }
+
+    // try {
+    //   database.connect((error) => {
+    //     if (error) {
+    //       throw error;
+    //     }
+
+    //   });
+    // } catch (err) {
+    //   console.log(err);
+    // }
   }
 
   listen() {

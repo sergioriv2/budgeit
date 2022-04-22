@@ -2,6 +2,37 @@ const { request, response } = require("express");
 
 const Operation = require("../models/operations.models");
 
+const getFilteredOperations = async (req = request, res = response) => {
+  try {
+    const { uid: user } = req.user;
+    const { category } = req.params;
+    const { offset = 0, limit = 10 } = req.query;
+
+    const result = await Operation.getFilteredOperations({
+      category,
+      user,
+      offset: parseInt(offset, 10),
+      limit: parseInt(limit, 10),
+    });
+
+    if (!result) return res.status(502).json({ msg: "Internal server error." });
+
+    const formatedResult = result.map((element) => {
+      const { category, category_uid, type, type_uid, ...restData } = element;
+      return {
+        category: { description: category, uid: category_uid },
+        type: { description: type, uid: type_uid },
+        ...restData,
+      };
+    });
+
+    return res.status(200).json({ ok: true, result: formatedResult });
+  } catch (err) {
+    console.log(err);
+    res.status(500).json({ msg: "Internal server error." });
+  }
+};
+
 const deleteOperation = async (req = request, res = result) => {
   try {
     const { operation_uid: uid } = req.body;
@@ -119,4 +150,5 @@ module.exports = {
   putOperation,
   deleteOperation,
   getOperations,
+  getFilteredOperations,
 };

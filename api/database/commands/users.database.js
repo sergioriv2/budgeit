@@ -1,76 +1,81 @@
-const sql = require("../connection.database");
+const connection = require("../connection.database");
+const sql = require("mssql");
 
 const spGetUserByEmail = (params) => {
   const { email } = params;
   return new Promise((resolve, reject) => {
-    sql.query("CALL spGetUserByEmail(?)", email, (err, res) => {
-      try {
-        if (err) {
-          reject(err);
-          return;
-        }
-        if (res.length) resolve(res[0]);
-      } catch (err) {
+    connection()
+      .then(async (pool) => {
+        await pool
+          .request()
+          .input("Email", sql.VarChar(100), email)
+          .execute("spGetUserByEmail", (error, result) => {
+            resolve(result.recordset);
+            reject(error);
+          });
+      })
+      .catch((err) => {
         reject(err);
-      }
-    });
+      });
   });
 };
 
 const spGetUserById = (params) => {
   const { uid } = params;
   return new Promise((resolve, reject) => {
-    sql.query("CALL spGetUserById(?)", uid, (err, res) => {
-      try {
-        if (err) {
-          reject(err);
-          return;
-        }
-        if (res.length) resolve(res[0]);
-      } catch (err) {
+    connection()
+      .then(async (pool) => {
+        await pool
+          .request()
+          .input("UID", sql.Int, uid)
+          .execute("spGetUserById", (error, result) => {
+            resolve(result.recordset);
+            reject(error);
+          });
+      })
+      .catch((err) => {
         reject(err);
-      }
-    });
+      });
   });
 };
 
 const spGetUserBudget = (params) => {
   const { user } = params;
   return new Promise((resolve, reject) => {
-    sql.query("CALL spGetUserBudget(?)", [user], (err, res) => {
-      try {
-        if (err) {
-          reject(err);
-          return;
-        }
-
-        resolve(res[0]);
-      } catch (err) {
+    connection()
+      .then(async (pool) => {
+        await pool
+          .request()
+          .input("UID", sql.Int, user)
+          .execute("spGetUserBudget", (error, result) => {
+            resolve(result.recordset);
+            reject(error);
+          });
+      })
+      .catch((err) => {
         reject(err);
-      }
-    });
+      });
   });
 };
 
 const cmdPostUser = (params) => {
   const { email, password } = params;
+  console.log(email, password);
   return new Promise((resolve, reject) => {
-    sql.query(
-      "INSERT INTO Users (Email_User, Password_User) VALUES (?, ?)",
-      [email, password],
-      (err, res) => {
-        try {
-          if (err) {
-            reject(err);
-            return;
-          }
-
-          resolve(res);
-        } catch (err) {
-          reject(err);
-        }
-      }
-    );
+    connection()
+      .then(async (pool) => {
+        await pool
+          .request()
+          .input("Email", sql.VarChar(100), email)
+          .input("Password", sql.VarChar(100), password)
+          .execute("spPostUser", (error, result) => {
+            resolve(result.rowsAffected);
+            reject(error);
+          });
+      })
+      .catch((err) => {
+        reject(err);
+      });
   });
 };
 

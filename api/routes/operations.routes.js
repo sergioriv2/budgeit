@@ -4,6 +4,7 @@ const {
   getOperations,
   putOperation,
   deleteOperation,
+  getFilteredOperations,
 } = require("../controllers/operations.controllers");
 const { validateJWT, validateFields } = require("../middlewares");
 const { check } = require("express-validator");
@@ -40,6 +41,8 @@ router.post(
 // GET
 
 router.get("/", [validateJWT], getOperations);
+
+router.get("/filter/category/:category", [validateJWT], getFilteredOperations);
 
 // PUT
 

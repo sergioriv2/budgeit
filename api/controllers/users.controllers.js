@@ -38,8 +38,7 @@ const signIn = async (req = request, res = response) => {
         .json({ msg: "Wrong email or password, try again." });
 
     // If everything success then generate the token
-
-    const token = await generateJWT(user.id);
+    const token = await generateJWT(user.uid);
 
     return res.json({ ok: true, token });
   } catch (err) {
