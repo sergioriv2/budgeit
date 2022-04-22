@@ -8,11 +8,11 @@ const spGetOperations = (params) => {
       .then(async (pool) => {
         await pool
           .request()
-          .input("USERS", sql.Int, user)
+          .input("USER", sql.Int, user)
           .input("OFFSET", sql.Int, offset)
           .input("LIMIT", sql.Int, limit)
           .execute("spGetOperations", (error, result) => {
-            resolve(result);
+            resolve(result.recordset);
             reject(error);
           });
       })
@@ -30,11 +30,11 @@ const spGetFilteredOperations = (params) => {
         await pool
           .request()
           .input("CATEGORY", sql.Int, category)
-          .input("USERS", sql.Int, user)
+          .input("USER", sql.Int, user)
           .input("OFFSET", sql.Int, offset)
           .input("LIMIT", sql.Int, limit)
           .execute("spGetExpensesFilteredByCategory", (error, result) => {
-            resolve(result);
+            resolve(result.recordset);
             reject(error);
           });
       })
@@ -52,11 +52,11 @@ const spPutOperation = (params) => {
         await pool
           .request()
           .input("UID", sql.Int, uid)
-          .input("CATEGORY", sql.Int, category)
-          .input("AMOUNT", sql.VarChar(50), amount)
-          .input("DESCRIPTION", sql.VarChar(50), description)
-          .input("DATE", sql.DateTime, date)
-          .execute("spGetExpensesFilteredByCategory", (error, result) => {
+          .input("Category", sql.Int, category)
+          .input("Amount", sql.VarChar(50), amount)
+          .input("Description", sql.VarChar(50), description)
+          .input("DateOperation", sql.DateTime, date)
+          .execute("spPutOperation", (error, result) => {
             resolve(result.rowsAffected);
             reject(error);
           });
@@ -74,7 +74,7 @@ const spDeleteOperation = (params) => {
       .then(async (pool) => {
         await pool
           .request()
-          .input("USER", sql.Int, uid)
+          .input("UID", sql.Int, uid)
           .execute("spDeleteOperation", (error, result) => {
             resolve(result.rowsAffected);
             reject(error);
@@ -93,12 +93,12 @@ const cmdPostOperation = (params) => {
       .then(async (pool) => {
         await pool
           .request()
-          .input("USER", sql.Int, user)
-          .input("TYPE", sql.Int, type)
-          .input("CATEGORY", sql.Int, category)
-          .input("AMOUNT", sql.VarChar(50), amount)
-          .input("DESCRIPTION", sql.VarChar(50), description)
-          .input("DATE", sql.DateTime, date)
+          .input("User", sql.Int, user)
+          .input("Type", sql.Int, type)
+          .input("Category", sql.Int, category)
+          .input("Amount", sql.VarChar(50), amount)
+          .input("Description", sql.VarChar(50), description)
+          .input("DateOperation", sql.DateTime, date)
           .execute("spPostOperation", (error, result) => {
             resolve(result.rowsAffected);
             reject(error);
