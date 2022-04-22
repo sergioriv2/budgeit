@@ -1,177 +1,134 @@
 import styled from "styled-components";
 import { format } from "date-fns";
-import { Formik, Form } from "formik";
 import { useState } from "react";
-import { TextField, Select } from "../FormComponents/";
-import axios from "axios";
+import { EditableOperation } from "./EditableOperation";
+import es from "date-fns/locale/es";
+import { DeleteButton, EditButton } from "./Forms/Buttons";
 
-const Layout = styled.li``;
+import "sweetalert2/src/sweetalert2.scss";
+
+const Layout = styled.li`
+  background-color: var(--dark-gray);
+  width: 100%;
+  padding: 15px 20px;
+  border-radius: 10px;
+  margin: 30px auto;
+  font-size: 15px;
+  transition: all 0.3s;
+  min-height: 245px;
+  @media (min-width: 1024px) {
+    font-size: 16px;
+    border-radius: 5px;
+    ${(props) =>
+      props.editable ? "width: 500px; margin: 30px auto;" : "width: 100%;"}
+  }
+`;
+
+const ButtonsContainer = styled.div`
+  display: flex;
+  margin-top: 20px;
+  & > div:nth-child(2) {
+    margin-left: 15px;
+  }
+`;
+
+const OperationDetail = styled.div`
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 15px;
+  height: auto;
+  width: 100%;
+
+  & > p {
+    margin: 0;
+  }
+
+  @media (min-width: 1024px) {
+    margin: 25px 0;
+  }
+`;
+
+const DetailTitle = styled.p`
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+`;
+
+const DetailValue = styled.p`
+  max-width: 150px;
+  word-wrap: break-word;
+  text-align: right;
+  @media (min-width: 1024px) {
+    max-width: 300px;
+  }
+`;
+
+const Amount = styled(DetailValue)`
+  &:before {
+    ${({ type }) => (type === 10 ? `content: '+ $ ';` : `content: '- $ ';`)}
+  }
+  font-weight: 500;
+  @media (min-width: 1024px) {
+    font-size: 25px;
+  }
+`;
+
+const Type = styled.h2`
+  margin-bottom: 20px;
+  font-weight: 500;
+  font-size: 26px;
+  border-bottom: 1px solid var(--light-gray);
+  padding-bottom: 10px;
+  @media (min-width: 1024px) {
+    border-bottom: 2px solid var(--light-gray);
+  }
+`;
 
 export const Operation = (props) => {
-  const { operation, categories, refetch } = props;
+  const [editable, setEditable] = useState(false);
+  const { operation } = props;
 
-  const { refetchOperations, refetchBudget } = refetch;
   const { description, amount, category, type, date, uid } = operation;
 
-  const [editable, setEditable] = useState(false);
-
-  const handleSubmit = (formData) => {
-    const { date, category_uid, ...restData } = formData;
-    const formattedData = {
-      date: new Date(date.year, date.month - 1, date.day),
-      category_uid: parseInt(formData.category_uid, 10),
-      ...restData,
-    };
-
-    axios({
-      method: "PUT",
-      url: "http://localhost:3001/api/operations",
-      data: {
-        ...formattedData,
-      },
-      headers: {
-        "x-api-key": window.localStorage.getItem("token"),
-      },
-    })
-      .then((res) => {
-        setEditable(false);
-        if (res.statusCode !== 200) {
-          refetchOperations();
-          refetchBudget();
-        }
-      })
-      .catch((err) => console.log(err.response));
-  };
-
-  const handleDelete = () => {
-    axios({
-      method: "DELETE",
-      url: "http://localhost:3001/api/operations",
-      data: {
-        operation_uid: uid,
-      },
-      headers: {
-        "x-api-key": window.localStorage.getItem("token"),
-      },
-    })
-      .then((res) => {
-        setEditable(false);
-        if (res.statusCode !== 200) {
-          refetchOperations();
-          refetchBudget();
-        }
-      })
-      .catch((err) => console.log(err.response));
-  };
-
-  const handleClick = (params) => {
-    switch (params.target.name) {
-      case "edit": {
-        setEditable(true);
-        return;
-      }
-      case "delete": {
-        handleDelete();
-        return;
-      }
-      case "cancel": {
-        setEditable(false);
-        return;
-      }
-      default:
-        return;
-    }
-  };
-
   return (
-    <Layout>
-      <Formik
-        initialValues={{
-          operation_uid: uid,
-          category_uid: category,
-          description,
-          amount,
-          type,
-          date: {
-            day: new Date(date).getDate(),
-            month: new Date(date).getMonth() + 1,
-            year: new Date(date).getFullYear(),
-          },
-        }}
-        onSubmit={(formData) => handleSubmit(formData)}
-      >
-        <Form>
-          {!editable ? (
-            <p>{description}</p>
-          ) : (
-            <TextField name="description" label="Descripcion"></TextField>
-          )}
-          {!editable ? (
-            <p>{category}</p>
-          ) : (
-            <Select name="category_uid" label="Categoria">
-              {categories.map(({ uid, description }) => (
-                <option key={uid} value={uid}>
-                  {description}
-                </option>
-              ))}
-            </Select>
-          )}
-          {!editable ? (
-            <p>{amount}</p>
-          ) : (
-            <TextField name="amount" label="Monto"></TextField>
-          )}
-          {!editable ? (
-            <p>{type}</p>
-          ) : (
-            <TextField name="type" label="Tipo" disabled></TextField>
-          )}
-
-          {!editable ? (
-            <p>Creacion: {format(new Date(date), "dd-MM-yyyy")} </p>
-          ) : (
-            <div>
-              <TextField name="date.day" label="Dia"></TextField>
-              <TextField name="date.month" label="Mes"></TextField>
-              <TextField name="date.year" label="Año"></TextField>
-            </div>
-          )}
-
-          {editable ? (
-            <button
-              name="cancel"
-              onClick={(event) => handleClick(event)}
-              type="button"
-            >
-              Cancelar
-            </button>
-          ) : null}
-          {editable ? (
-            <button name="submit" type="submit">
-              Guardar
-            </button>
-          ) : null}
-        </Form>
-      </Formik>
+    <Layout editable={editable}>
       {!editable ? (
-        <button
-          name="edit"
-          onClick={(event) => handleClick(event)}
-          type="button"
-        >
-          Editar
-        </button>
-      ) : null}
-      {!editable ? (
-        <button
-          name="delete"
-          onClick={(event) => handleClick(event)}
-          type="button"
-        >
-          Eliminar
-        </button>
-      ) : null}
+        <div>
+          <Type>{type.description}</Type>
+          <OperationDetail>
+            <DetailTitle>Monto de la operación</DetailTitle>
+            <Amount type={type.uid}>
+              {amount.toLocaleString({ style: "currency", currency: "ARS" })}
+            </Amount>
+          </OperationDetail>
+          <OperationDetail>
+            <DetailTitle>Descripcion</DetailTitle>
+            <DetailValue>{description}</DetailValue>
+          </OperationDetail>
+          {type.uid !== 10 ? (
+            <OperationDetail>
+              <DetailTitle>Categoria</DetailTitle>
+              <DetailValue>{category.description}</DetailValue>
+            </OperationDetail>
+          ) : null}
+          <OperationDetail>
+            <p>
+              {format(new Date(date), "dd 'de' MMMM yyyy", {
+                locale: es,
+              })}
+            </p>
+          </OperationDetail>
+          <ButtonsContainer>
+            <EditButton setEditable={setEditable}></EditButton>
+            <DeleteButton uid={uid} setEditable={setEditable}></DeleteButton>
+          </ButtonsContainer>
+        </div>
+      ) : (
+        <EditableOperation
+          operation={operation}
+          setEditable={setEditable}
+        ></EditableOperation>
+      )}
     </Layout>
   );
 };

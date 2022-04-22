@@ -1,19 +1,17 @@
-import { useCallback } from "react";
-
+import { useCallback, useState } from "react";
 import useFetch from "./useFetch";
-import useLocalStorage from "./useLocalStorage";
 import axios from "axios";
 
 const useFetchGetData = (apiEndpoint) => {
-  const [token] = useLocalStorage("token");
+  const [endpoint, setEndpoint] = useState(apiEndpoint);
 
   const fetchData = useCallback(() => {
     return new Promise((resolve, reject) => {
       axios({
-        url: apiEndpoint,
+        url: endpoint,
         method: "GET",
         headers: {
-          "x-api-key": token,
+          "x-api-key": window.localStorage.getItem("token"),
         },
       })
         .then(async (res) => {
@@ -23,15 +21,15 @@ const useFetchGetData = (apiEndpoint) => {
           return reject(data);
         })
         .catch((err) => {
-          console.log(err.response.data);
-          return reject(err.response.data);
+          console.log(err.response);
+          return reject(err.response);
         });
     });
-  }, [token, apiEndpoint]);
+  }, [endpoint]);
 
   const { data, loading, error, refetch } = useFetch(fetchData);
 
-  return { data, loading, error, refetch };
+  return { data, loading, error, refetch, setEndpoint };
 };
 
 export default useFetchGetData;

@@ -5,48 +5,73 @@ import styled from "styled-components";
 const Layout = styled.div`
   display: flex;
   flex-direction: column;
-  max-width: 500px;
+  max-width: 100%;
   justify-content: center;
-  height: auto;
-  margin-top: 15px;
-  margin-bottom: 25px;
+  margin: 20px 0;
 `;
 
-const Label = styled.label`
-  margin: 5px 0;
-  font-weight: 700;
-  color: #5b5b5d;
+const Title = styled.label`
+  font-weight: 500;
+  font-size: 14px;
+  color: var(--white-1);
+  font-family: var(--title-font-2);
   text-transform: uppercase;
+`;
+
+const LabelContainer = styled.label`
+  margin: 5px 0;
 `;
 
 const Input = styled.input`
-  &:focus {
-    border: 2px solid #3096db;
-  }
-
-  &:not(:focus) {
-    border: ${(params) =>
-      params.meta.touched && params.meta.error
-        ? "2px solid #BF4342;"
-        : "1px solid rgba(0, 0, 0, 0.16);"};
-  }
-
-  margin: 5px 0;
-  padding: 12px 10px;
-  font-family: inherit;
+  border: none;
   outline: 0;
-  border-radius: 7px;
-  transition: all 0.1s;
+  font-family: inherit;
+  ${(props) => {
+    switch (props.theme) {
+      case "login":
+        return `background-color: inherit;
+      border-bottom: ${
+        !props.hasErrors
+          ? "1px solid var(--light-gray);"
+          : "1px solid var(--red);"
+      };
+      border-radius: 0;
+      padding: 15px 0;
+      color: var(--dark-gray-2);
+      transition: all 0.1s;
+      font-size: 16px;
+      &:focus {
+        color: var(--white-1);
+        border-bottom: 2px solid var(--light-gray)
+      }`;
+      default:
+        return `
+        font-weight: 500;
+      &:focus {
+        border: 2px solid #3096db;
+      }
+      border: none;
+      padding: 12px 10px 12px 15px;
+      border-radius: 5px;
+      background-color: #2f2f2f;
+      transition: all 0.1s;
+      color: ${!props.disabled ? "var(--white-1);" : "#e4e4e454;"}
+      `;
+    }
+  }}
 `;
 
 const ErrorMessage = styled.p`
-  color: #bf4342;
-  font-weight: 700;
-  text-transform: uppercase;
+  color: var(--red);
   font-size: 15px;
   margin: 0;
   margin-top: 10px;
-  font-family: "Quicksand", sans-serif;
+`;
+
+const Important = styled.label`
+  color: var(--red);
+  font-weight: 700;
+  margin-left: 10px;
 `;
 
 const InputField = ({
@@ -55,23 +80,32 @@ const InputField = ({
   min,
   max,
   disabled = false,
+  theme = "default",
+  placeholder = "",
   ...props
 }) => {
   const [field, meta] = useField(props);
+  const hasErrors = meta.touched && meta.error;
+
   return (
     <Layout>
-      <Label>{label}</Label>
+      <LabelContainer>
+        <Title>{label}</Title>
+        {hasErrors ? <Important>*</Important> : null}
+      </LabelContainer>
+
       <Input
+        placeholder={placeholder}
         meta={meta}
         {...field}
         disabled={disabled}
         type={type}
         min={min}
         max={max}
+        theme={theme}
+        hasErrors={hasErrors}
       ></Input>
-      {meta.touched && meta.error ? (
-        <ErrorMessage>{meta.error}</ErrorMessage>
-      ) : null}
+      {hasErrors ? <ErrorMessage>{meta.error}</ErrorMessage> : null}
     </Layout>
   );
 };

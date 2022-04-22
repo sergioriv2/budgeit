@@ -1,0 +1,9 @@
+@keyframes signupGoDown {
+    0% {height: 0;  }
+    100% {height: 550px; }
+}
+
+@keyframes signupGoUp {
+    0% {height: 550px; }
+    100% {height: 0; display: none; }
+}

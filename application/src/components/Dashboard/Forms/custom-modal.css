@@ -1,0 +1,18 @@
+.customModal {
+    background: var(--dark-gray);
+    max-width: 350px;
+    width: 100%;
+    margin: 0;
+  }
+
+  #closeIcon{
+    fill: var(--light-gray);
+    top: 23px;
+  }
+
+  @media (min-width: 1024px) {
+    .customModal {
+        max-width: 500px;
+        width: 100%;
+      }
+  }

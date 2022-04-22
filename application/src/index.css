@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=Mochiy+Pop+One&family=Open+Sans:wght@300;400;500;700&family=Roboto:wght@500;700&display=swap');
+
 body {
   margin: 0;
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
@@ -10,4 +12,37 @@ body {
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
+}
+
+:root {
+  --dark-gray: #232223;
+  --dark-gray-2: #919191;
+  --light-gray: #CACACE;
+  --black: #0c0c0d;
+  --black-2:  #2f2f2f;
+  --violet-1: #624CAB;
+  --violet-2: #7189FF;
+  --dark-blue: #003f5c;
+  --pink: #bc5090;
+  --red: #d13633;
+  --green: #3FA34D;
+  --white-1: #eee;
+  --white-2: #fff;
+  --title-font-1:  "Mochiy Pop One", sans-serif;
+  --title-font-2: 'Roboto', sans-serif;
+  --paragraph-font:'Open Sans', sans-serif;
+}
+
+*{
+  box-sizing: border-box;
+}
+
+h1, h2, h3, h4,p {
+  margin: 0;
+
+}
+
+h1, h2, h3, h4{
+
+  font-family: var(--title-font-2);
 }
