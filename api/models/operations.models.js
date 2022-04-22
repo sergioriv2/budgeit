@@ -19,8 +19,7 @@ const Operation = function (operation) {
 Operation.postOperation = async (operation) => {
   try {
     const result = await cmdPostOperation(operation);
-
-    return result === 1 ? true : false;
+    return result[0] === 1 ? true : false;
   } catch (err) {
     throw new Error(err);
   }
@@ -28,9 +27,9 @@ Operation.postOperation = async (operation) => {
 
 Operation.deleteOperation = async (operation) => {
   try {
-    const { affectedRows } = await spDeleteOperation(operation);
+    const result = await spDeleteOperation(operation);
 
-    return affectedRows === 1 ? true : false;
+    return result[0] === 1 ? true : false;
   } catch (err) {
     throw new Error(err);
   }
@@ -57,7 +56,7 @@ Operation.getFilteredOperations = async (params) => {
 Operation.putOperation = async (params) => {
   try {
     const result = await spPutOperation(params);
-    return result === 1 ? true : false;
+    return result[0] === 1 ? true : false;
   } catch (err) {
     throw new Error(err);
   }
