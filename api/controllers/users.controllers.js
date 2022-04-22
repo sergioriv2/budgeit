@@ -27,7 +27,7 @@ const signIn = async (req = request, res = response) => {
     if (!user)
       return res
         .status(401)
-        .json({ msg: "Wrong email or password, try again." });
+        .json({ msg: "Wrong email or password, try again.", errcode: 20 });
 
     // Validate password
     const validPassword = bcrypt.compareSync(password, user.password);
@@ -35,7 +35,7 @@ const signIn = async (req = request, res = response) => {
     if (!validPassword)
       return res
         .status(401)
-        .json({ msg: "Wrong email or password, try again." });
+        .json({ msg: "Wrong email or password, try again.", errcode: 20 });
 
     // If everything success then generate the token
     const token = await generateJWT(user.uid);
@@ -43,7 +43,7 @@ const signIn = async (req = request, res = response) => {
     return res.json({ ok: true, token });
   } catch (err) {
     console.log(err);
-    return res.status(500).json({ msg: "Internal server error." });
+    return res.status(500).json({ msg: "Internal server error.", errcode: 21 });
   }
 };
 
@@ -56,7 +56,9 @@ const postUser = async (req = request, res = response) => {
     const user = await User.getUserByEmail({ email });
 
     if (user)
-      return res.status(400).json({ msg: "This email already exists." });
+      return res
+        .status(400)
+        .json({ msg: "This email already exists.", errcode: 22 });
 
     const salt = bcrypt.genSaltSync();
     newUser.password = bcrypt.hashSync(password, salt);
@@ -69,7 +71,7 @@ const postUser = async (req = request, res = response) => {
     });
   } catch (err) {
     console.log(err);
-    return res.status(500).json({ msg: "Internal server error." });
+    return res.status(500).json({ msg: "Internal server error.", errcode: 21 });
   }
 };
 

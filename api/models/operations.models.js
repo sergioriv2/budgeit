@@ -28,7 +28,6 @@ Operation.postOperation = async (operation) => {
 Operation.deleteOperation = async (operation) => {
   try {
     const result = await spDeleteOperation(operation);
-
     return result[0] === 1 ? true : false;
   } catch (err) {
     throw new Error(err);
