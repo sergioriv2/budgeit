@@ -16,49 +16,51 @@ const Layout = styled.div`
   background-color: var(--white-1);
   white-space: nowrap;
   overflow: hidden;
-
-  & > form {
-    margin: 30px 35px;
-    position: relative;
-
-    & > div > label > label:nth-child(1) {
-      color: var(--black-2);
-      opacity: 0;
-      transition: opacity 0.5s;
-      ${(props) => {
-        if (props.showSignUp) {
-          return `opacity: 1;`;
-        }
-      }}
-    }
-
-    & > div > input {
-      color: var(--black-1);
-      opacity: 0;
-      transition: opacity 0.5s;
-      &:focus {
-        color: var(--black-1);
-      }
-
-      ${(props) => {
-        if (props.showSignUp) {
-          return `opacity: 1;`;
-        }
-      }}
-    }
-  }
   display: none;
+
   ${(props) => {
     if (props.showSignUp) {
       return `animation: .5s signupGoDown ease-in-out forwards;
-      display: block;`;
+    display: block;`;
     } else if (!props.firstTime) {
       return `;
-      display: block;
-        animation: .5s signupGoUp ease-in-out forwards;
-        `;
+    display: block;
+      animation: .5s signupGoUp ease-in-out forwards;
+      `;
     }
   }}
+`;
+
+const FormLayout = styled(Form)`
+  margin: 30px 35px;
+  position: relative;
+  min-height: auto;
+
+  & > div > label > label:nth-child(1) {
+    color: var(--black-2);
+    opacity: 0;
+    transition: opacity 0.5s;
+    ${(props) => {
+      if (props.showSignUp) {
+        return `opacity: 1;`;
+      }
+    }}
+  }
+
+  & > div > input {
+    color: var(--black-1);
+    opacity: 0;
+    transition: opacity 0.5s;
+    &:focus {
+      color: var(--black-1);
+    }
+
+    ${(props) => {
+      if (props.showSignUp) {
+        return `opacity: 1;`;
+      }
+    }}
+  }
 `;
 
 const BackButton = styled.button`
@@ -78,6 +80,11 @@ const BackButton = styled.button`
   transition: opacity 1s;
   transition-delay: 0.3s;
   opacity: 0;
+
+  &:active {
+    filter: brightness(80%);
+  }
+
   ${(props) => {
     if (props.showSignUp) {
       return `opacity: 1; 
@@ -89,13 +96,19 @@ const BackButton = styled.button`
 
 const RegisterButton = styled.button`
   width: 100%;
-  height: 30px;
+  height: 40px;
   border-radius: 20px;
   border: 0;
   background-color: var(--violet-1);
   color: var(--white-2);
-  margin-top: 10px;
+  margin: 10px 0;
   cursor: pointer;
+  font-family: inherit;
+  font-size: 16px;
+  box-shadow: 0px 2px 5px 0px rgba(0, 0, 0, 0.3);
+  &:active {
+    filter: brightness(90%);
+  }
 `;
 
 export const SignupComponent = (props) => {
@@ -178,7 +191,11 @@ export const SignupComponent = (props) => {
             ),
         })}
       >
-        <Form autoComplete="off" spellCheck="false">
+        <FormLayout
+          autoComplete="off"
+          spellCheck="false"
+          showSignUp={showSignUp}
+        >
           <BackButton
             className="fa-solid fa-arrow-up"
             showSignUp={showSignUp}
@@ -209,7 +226,7 @@ export const SignupComponent = (props) => {
           />
           {/* {errorMessage !== "" ? <p>{errorMessage}</p> : null} */}
           <RegisterButton type="submit">Registrarse</RegisterButton>
-        </Form>
+        </FormLayout>
       </Formik>
     </Layout>
   );

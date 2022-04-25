@@ -17,6 +17,11 @@ const Button = styled.div`
   & > p {
     margin-left: 10px;
   }
+
+  &:active {
+    filter: brightness(90%);
+  }
+  box-shadow: 0px 2px 5px 2px rgb(0, 0, 0, 30%);
   background-color: ${(props) => {
     switch (props.theme) {
       case "red":
@@ -32,7 +37,12 @@ const FloatingButton = styled(Button)`
   border-radius: 50%;
   position: fixed;
   z-index: 15;
-  box-shadow: 0px 0px 12px 2px rgb(0, 0, 0, 30%);
+  box-shadow: -1px 5px 5px 5px rgb(0, 0, 0, 30%);
+
+  &:active {
+    filter: brightness(80%);
+    box-shadow: -1px 2px 5px 3px rgb(0, 0, 0, 30%);
+  }
 
   ${(props) => {
     switch (props.theme) {
@@ -42,6 +52,7 @@ const FloatingButton = styled(Button)`
       right: 3.5%;
       bottom: 3.5%;
       background-color: var(--pink);
+
 
       @media (min-width: 1024px) {
         width: 55px;
@@ -53,7 +64,7 @@ const FloatingButton = styled(Button)`
         return `width: 50px;
       height: 50px;
       right: 3.5%;
-      bottom: 12%;
+      bottom: calc(10% + 2vh);
       background-color: var(--white-2);
       color: var(--black-2);
       
@@ -80,6 +91,12 @@ const NormalButton = styled.button`
   cursor: pointer;
   border-radius: 5px;
   border: none;
+  box-shadow: 0px 2px 5px 2px rgb(0, 0, 0, 30%);
+
+  &:active {
+    filter: brightness(90%);
+    box-shadow: 0px 1px 5px 3px rgb(0, 0, 0, 30%);
+  }
 
   background-color: ${(props) => {
     switch (props.theme) {

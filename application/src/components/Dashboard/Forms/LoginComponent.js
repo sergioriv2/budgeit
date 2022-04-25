@@ -10,9 +10,9 @@ import Icon from "../../../assets/icon.png";
 import { SignupComponent } from "./SignupComponent";
 
 const Layout = styled.div`
-  width: 420px;
+  width: 400px;
   margin: 0 10px;
-  height: 500px;
+  min-height: 520px;
   background-color: var(--black);
   position: relative;
   box-shadow: 0px 3px 10px 2px rgba(0, 0, 0, 0.3);
@@ -23,17 +23,6 @@ const Layout = styled.div`
     flex-direction: column;
     padding: 30px 35px;
 
-    & > img {
-      position: absolute;
-      width: 90px;
-      height: 90px;
-      border-radius: 50%;
-      top: -65px;
-      left: 50%;
-      z-index: 5;
-      transform: translateX(-50%);
-    }
-
     & > h1 {
       text-align: center;
       font-size: 25px;
@@ -41,23 +30,47 @@ const Layout = styled.div`
       margin-bottom: 5px;
       color: var(--white-1);
     }
+  }
+`;
 
-    & > button {
-      position: absolute;
-      bottom: -30px;
-      border: 0;
-      outline: none;
-      cursor: pointer;
-      border-radius: 50%;
-      background-color: var(--white-1);
-      color: var(--black);
-      font-size: 25px;
-      width: 60px;
-      height: 60px;
-      left: 50%;
-      transform: translateX(-50%);
-      box-shadow: 0px 3px 10px 2px rgba(0, 0, 0, 0.3);
-    }
+const AppImage = styled.img`
+  position: absolute;
+  width: 90px;
+  height: 90px;
+  border-radius: 50%;
+  top: -65px;
+  left: 50%;
+  z-index: 5;
+  transform: translateX(-50%);
+`;
+
+const LoginButton = styled.button`
+  position: absolute;
+  bottom: -30px;
+  border: 0;
+  outline: none;
+  cursor: pointer;
+  border-radius: 50%;
+  background-color: var(--white-1);
+  color: var(--black);
+  font-size: 25px;
+  width: 60px;
+  height: 60px;
+  left: 50%;
+  transform: translateX(-50%);
+  box-shadow: 0px 3px 10px 2px rgba(0, 0, 0, 0.3);
+  border: 2px solid var(--white-1);
+  transition: all 0.2s;
+
+  &: hover {
+    background-color: var(--black);
+    color: var(--white-1);
+  }
+
+  &:active {
+    width: 58px;
+    filter: brightness(90%);
+    height: 58px;
   }
 `;
 
@@ -68,6 +81,12 @@ const LabelSignup = styled.label`
   font-weight: 500;
   cursor: pointer;
   margin-top: 5%;
+`;
+
+const ErrorMessage = styled.p`
+  color: var(--dark-gray-2);
+  font-weight: 500;
+  margin: 10px 0;
 `;
 
 export const LoginComponent = () => {
@@ -94,8 +113,11 @@ export const LoginComponent = () => {
         setErrorMessage(response.data.msg);
       })
       .catch((error) => {
-        console.log(error.response);
-        setErrorMessage(error.response.data.msg);
+        if (error.response.data.errcode === 20) {
+          setErrorMessage(
+            "Contraseña o email incorrecto, inténtelo nuevamente."
+          );
+        }
       });
   }, []);
 
@@ -123,7 +145,7 @@ export const LoginComponent = () => {
         })}
       >
         <Form autoComplete="off" spellCheck="false">
-          <img src={Icon} alt="budgeit-icon"></img>
+          <AppImage src={Icon} alt="budgeit-icon"></AppImage>
           <h1>Inicio de sesión</h1>
           <TextField
             name="email"
@@ -142,8 +164,13 @@ export const LoginComponent = () => {
           <LabelSignup onClick={() => setShowSignUp(true)}>
             Crear nuevo usuario
           </LabelSignup>
-          {errorMessage !== "" ? <p>{errorMessage}</p> : null}
-          <button type="submit" className="fa-solid fa-arrow-right"></button>
+          {errorMessage !== "" ? (
+            <ErrorMessage>{errorMessage}</ErrorMessage>
+          ) : null}
+          <LoginButton
+            type="submit"
+            className="fa-solid fa-arrow-right"
+          ></LoginButton>
         </Form>
       </Formik>
       <SignupComponent

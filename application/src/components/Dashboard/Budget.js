@@ -9,9 +9,10 @@ const Label = styled.p`
 
 const Layout = styled.div`
   text-align: center;
-
+  width: 100%;
+  max-width: 120px;
   @media (min-width: 1024px) {
-    width: 200px;
+    max-width: 500px;
   }
 `;
 
@@ -20,6 +21,10 @@ const Value = styled.p`
   font-weight: bold;
   font-family: var(--title-font-2);
   right: 0;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: clip;
+
   &:before {
     content: "$ ";
   }
