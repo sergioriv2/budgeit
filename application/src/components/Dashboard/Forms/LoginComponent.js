@@ -99,7 +99,7 @@ export const LoginComponent = () => {
   const submitDataAPI = useCallback((formData) => {
     axios({
       method: "POST",
-      url: "http://localhost:3001/api/users/signin",
+      url: "https://budgeit-api.herokuapp.com/api/users/signin",
       data: {
         email: formData.email,
         password: formData.password,

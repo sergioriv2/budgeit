@@ -24,10 +24,10 @@ export const CategorySelect = ({ categories, setEndpoint }) => {
   useEffect(() => {
     const handleSubmit = () => {
       if (values.filter === "0")
-        setEndpoint("http://localhost:3001/api/operations");
+        setEndpoint("https://budgeit-api.herokuapp.com/api/operations");
       else
         setEndpoint(
-          "http://localhost:3001/api/operations/filter/category/" +
+          "https://budgeit-api.herokuapp.com/api/operations/filter/category/" +
             values.filter
         );
     };

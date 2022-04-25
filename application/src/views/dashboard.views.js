@@ -1,6 +1,6 @@
 import styled from "styled-components";
 
-import useFetchGetData from "../hooks/useFetchGetData";
+import useFetchGetData from "../hooks/useFetch";
 import { OperationsList } from "../components/Dashboard/OperationsList";
 import { AddOperation } from "../components/Dashboard/Forms/AddOperation";
 import { AppContext } from "../context/AppContext";
@@ -96,17 +96,17 @@ export const Dashboard = () => {
     data: budget,
     refetch: refetchBudget,
     loading: loadingBudget,
-  } = useFetchGetData("http://localhost:3001/api/users/budget");
+  } = useFetchGetData("https://budgeit-api.herokuapp.com/api/users/budget");
 
   const {
     data: operations,
     loading: operationsLoad,
     refetch: refetchOperations,
     setEndpoint,
-  } = useFetchGetData("http://localhost:3001/api/operations");
+  } = useFetchGetData("https://budgeit-api.herokuapp.com/api/operations");
 
   const { data: categories } = useFetchGetData(
-    "http://localhost:3001/api/categories"
+    "https://budgeit-api.herokuapp.com/api/categories"
   );
 
   useEffect(() => {
@@ -120,7 +120,6 @@ export const Dashboard = () => {
       value={{
         refetchBudget,
         refetchOperations,
-        categories,
         removeToken,
       }}
     >
