@@ -33,7 +33,7 @@ const Layout = styled.div`
 `;
 
 const FormLayout = styled(Form)`
-  margin: 30px 35px;
+  margin: 25px 30px;
   position: relative;
   min-height: auto;
 
@@ -48,7 +48,7 @@ const FormLayout = styled(Form)`
     }}
   }
 
-  & > div > input {
+  & > div > div > input {
     color: var(--black-1);
     opacity: 0;
     transition: opacity 0.5s;
@@ -102,7 +102,7 @@ const RegisterButton = styled.button`
   border: 0;
   background-color: var(--violet-1);
   color: var(--white-2);
-  margin: 10px 0;
+  margin: 5px 0;
   cursor: pointer;
   font-family: inherit;
   font-size: 16px;

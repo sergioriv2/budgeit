@@ -1,6 +1,8 @@
 import { useField } from "formik";
 
 import styled from "styled-components";
+import { useState } from "react";
+import { TogglePassword } from "./TogglePassword";
 
 const Layout = styled.div`
   display: flex;
@@ -26,6 +28,8 @@ const Input = styled.input`
   border: none;
   outline: 0;
   font-family: inherit;
+  width: 100%;
+
   ${(props) => {
     switch (props.theme) {
       case "login":
@@ -61,6 +65,11 @@ const Input = styled.input`
   }}
 `;
 
+const InputContainer = styled.div`
+  width: 100%;
+  position: relative;
+`;
+
 const ErrorMessage = styled.p`
   color: var(--red);
   font-size: 15px;
@@ -86,6 +95,7 @@ const InputField = ({
   ...props
 }) => {
   const [field, meta] = useField(props);
+  const [inputType, setInputType] = useState(type);
   const hasErrors = meta.touched && meta.error;
 
   return (
@@ -94,18 +104,23 @@ const InputField = ({
         <Title>{label}</Title>
         {hasErrors ? <Important>*</Important> : null}
       </LabelContainer>
+      <InputContainer>
+        <Input
+          placeholder={placeholder}
+          meta={meta}
+          {...field}
+          disabled={disabled}
+          type={inputType}
+          min={min}
+          max={max}
+          theme={theme}
+          hasErrors={hasErrors}
+        ></Input>
+        {type === "password" ? (
+          <TogglePassword setInputType={setInputType}></TogglePassword>
+        ) : null}
+      </InputContainer>
 
-      <Input
-        placeholder={placeholder}
-        meta={meta}
-        {...field}
-        disabled={disabled}
-        type={type}
-        min={min}
-        max={max}
-        theme={theme}
-        hasErrors={hasErrors}
-      ></Input>
       {hasErrors ? <ErrorMessage>{meta.error}</ErrorMessage> : null}
     </Layout>
   );

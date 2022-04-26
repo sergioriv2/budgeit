@@ -50,7 +50,7 @@ const FloatingButton = styled(Button)`
         return `width: 50px;
       height: 50px;
       right: 3.5%;
-      bottom: 3.5%;
+      bottom: 20px;
       background-color: var(--pink);
 
 
@@ -64,7 +64,7 @@ const FloatingButton = styled(Button)`
         return `width: 50px;
       height: 50px;
       right: 3.5%;
-      bottom: calc(10% + 2vh);
+      bottom: 80px;
       background-color: var(--white-2);
       color: var(--black-2);
       

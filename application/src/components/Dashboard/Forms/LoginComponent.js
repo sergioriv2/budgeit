@@ -13,7 +13,7 @@ import { LoadingBackground } from "../LoadingBackground";
 const Layout = styled.div`
   width: 400px;
   margin: 0 10px;
-  min-height: 520px;
+  min-height: 550px;
   background-color: var(--black);
   position: relative;
   box-shadow: 0px 3px 10px 2px rgba(0, 0, 0, 0.3);
@@ -23,6 +23,10 @@ const Layout = styled.div`
     display: flex;
     flex-direction: column;
     padding: 30px 35px;
+
+    & > div > div > div > i {
+      color: var(--light-gray);
+    }
 
     & > h1 {
       text-align: center;
@@ -36,10 +40,10 @@ const Layout = styled.div`
 
 const AppImage = styled.img`
   position: absolute;
-  width: 90px;
-  height: 90px;
+  width: 75px;
+  height: 75px;
   border-radius: 50%;
-  top: -65px;
+  top: -45px;
   left: 50%;
   z-index: 5;
   transform: translateX(-50%);
