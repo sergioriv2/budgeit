@@ -57,6 +57,7 @@ const spPutOperation = (params) => {
           .input("Description", sql.VarChar(50), description)
           .input("DateOperation", sql.DateTime, date)
           .execute("spPutOperation", (error, result) => {
+            // console.log(result)
             resolve(result.rowsAffected);
             reject(error);
           });
