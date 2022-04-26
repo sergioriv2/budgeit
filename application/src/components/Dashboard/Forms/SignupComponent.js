@@ -7,6 +7,7 @@ import * as Yup from "yup";
 import axios from "axios";
 
 import "./signup.css";
+import { LoadingBackground } from "../LoadingBackground";
 
 const Layout = styled.div`
   width: 100%;
@@ -114,6 +115,7 @@ const RegisterButton = styled.button`
 export const SignupComponent = (props) => {
   const { showSignUp, setShowSignUp } = props;
   const [firstTime, setFirstTime] = useState(true);
+  const [loading, setLoading] = useState(false);
 
   const initialValues = {
     email: "",
@@ -122,10 +124,11 @@ export const SignupComponent = (props) => {
   };
 
   const submitDataAPI = useCallback(
-    (formData) => {
+    (formData, resetForm) => {
+      setLoading(true);
       axios({
         method: "POST",
-        url: "http://localhost:3001/api/users/",
+        url: "https://budgeit-api.herokuapp.com/api/users/",
         data: {
           email: formData.email,
           password: formData.password,
@@ -133,6 +136,8 @@ export const SignupComponent = (props) => {
       })
         .then((response) => {
           if (response.status === 200) {
+            setShowSignUp(false);
+            resetForm();
             return Swal.fire({
               title: "Usuario registrado con éxito",
               text: "¡Inicia sesión para empezar a usar Budgeit!",
@@ -143,7 +148,7 @@ export const SignupComponent = (props) => {
           }
         })
         .catch((error) => {
-          if (error.response.data.errcode === 22) {
+          if (error.response?.data.errcode === 22) {
             return Swal.fire({
               title: "Ocurrió un error",
               text: "El email ya se encuentra registrado, intenta usando otro email.",
@@ -163,9 +168,10 @@ export const SignupComponent = (props) => {
         })
         .finally(() => {
           setFirstTime(false);
+          setLoading(false);
         });
     },
-    [setFirstTime]
+    [setFirstTime, setShowSignUp]
   );
 
   const goBack = () => {
@@ -175,14 +181,22 @@ export const SignupComponent = (props) => {
 
   return (
     <Layout showSignUp={showSignUp} firstTime={firstTime}>
+      {loading ? <LoadingBackground></LoadingBackground> : null}
       <Formik
         initialValues={initialValues}
-        onSubmit={(formData) => submitDataAPI(formData)}
+        onSubmit={(formData, { resetForm }) =>
+          submitDataAPI(formData, resetForm)
+        }
         validationSchema={Yup.object({
           email: Yup.string()
             .required("Por favor, ingrese un email")
             .email("Ingrese un email válido"),
-          password: Yup.string().required("Por favor, ingrese una contraseña"),
+          password: Yup.string()
+            .required("Por favor, ingrese una contraseña")
+            .matches(
+              /(?=(.*[0-9]))(?=.*[\!@#$%^&*()\\[\]{}\-_+=~`|:;"'<>,./?])(?=.*[a-z])(?=(.*[A-Z]))(?=(.*)).{8,}/,
+              "La contraseña debe tener al menos 1 minúscula, 1 mayúscula, 1 número, 1 caracter especial y 8 caracteres."
+            ),
           passwordConfirm: Yup.string()
             .required("Por favor, ingrese una contraseña")
             .oneOf(

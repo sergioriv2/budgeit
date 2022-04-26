@@ -16,7 +16,6 @@ const Layout = styled.ul`
 
 export const OperationsList = (props) => {
   const { operations, loading } = props;
-
   if (loading)
     return (
       <Layout>

@@ -12,6 +12,7 @@ import { AddButton, SaveButton } from "./Buttons";
 
 import "react-responsive-modal/styles.css";
 import "./custom-modal.css";
+import { LoadingBackground } from "../LoadingBackground";
 
 const Layout = styled.div`
   & > div
@@ -49,10 +50,11 @@ export const AddOperation = () => {
   const context = useContext(AppContext);
   const { refetchBudget, refetchOperations, categories } = context;
   const [formVisible, setFormVisible] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   const handleSubmit = (formData, resetForm) => {
     const { date, category_uid, type_uid, ...restData } = formData;
-
+    setLoading(true);
     Swal.fire({
       title: "¿Deseas guardar el registro?",
       icon: "question",
@@ -74,7 +76,7 @@ export const AddOperation = () => {
 
         axios({
           method: "POST",
-          url: "http://localhost:3001/api/operations",
+          url: "https://budgeit-api.herokuapp.com/api/operations",
           data: {
             ...formattedData,
           },
@@ -104,6 +106,7 @@ export const AddOperation = () => {
           .finally(() => {
             resetForm();
             setFormVisible(false);
+            setLoading(false);
           });
       }
     });
@@ -111,6 +114,7 @@ export const AddOperation = () => {
 
   return (
     <Layout>
+      {loading ? <LoadingBackground></LoadingBackground> : null}
       <Modal
         center
         closeOnEsc={true}

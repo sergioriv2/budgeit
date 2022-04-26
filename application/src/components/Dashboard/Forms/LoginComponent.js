@@ -8,6 +8,7 @@ import axios from "axios";
 import styled from "styled-components";
 import Icon from "../../../assets/icon.png";
 import { SignupComponent } from "./SignupComponent";
+import { LoadingBackground } from "../LoadingBackground";
 
 const Layout = styled.div`
   width: 400px;
@@ -93,16 +94,24 @@ export const LoginComponent = () => {
   const [loggedIn, setLoggedIn] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
   const [showSignUp, setShowSignUp] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   const navigate = useNavigate();
 
   const submitDataAPI = useCallback((formData) => {
+    setLoading(true);
     axios({
       method: "POST",
       url: "https://budgeit-api.herokuapp.com/api/users/signin",
       data: {
         email: formData.email,
         password: formData.password,
+      },
+      headers: {
+        "Content-Type": "application/json",
+        Accept: "application/json",
+        "Access-Control-Allow-Origin": "*",
+        "Access-Control-Allow-Credentials": true,
       },
     })
       .then((response) => {
@@ -113,11 +122,14 @@ export const LoginComponent = () => {
         setErrorMessage(response.data.msg);
       })
       .catch((error) => {
-        if (error.response.data.errcode === 20) {
-          setErrorMessage(
-            "Contraseña o email incorrecto, inténtelo nuevamente."
-          );
+        if (error.response?.data.errcode === 20) {
+          setErrorMessage("Contraseña o email incorrecto.");
+        } else {
+          setErrorMessage("Error inesperado, intentelo más tarde.");
         }
+      })
+      .finally(() => {
+        setLoading(false);
       });
   }, []);
 
@@ -134,6 +146,7 @@ export const LoginComponent = () => {
 
   return (
     <Layout>
+      {loading ? <LoadingBackground></LoadingBackground> : null}
       <Formik
         initialValues={initialValues}
         onSubmit={(formData) => submitDataAPI(formData)}

@@ -66,6 +66,7 @@ const ErrorMessage = styled.p`
   font-size: 15px;
   margin: 0;
   margin-top: 10px;
+  white-space: break-spaces;
 `;
 
 const Important = styled.label`

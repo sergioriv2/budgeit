@@ -1,5 +1,5 @@
 import { Formik, Form } from "formik";
-import { useContext } from "react";
+import { useContext, useState } from "react";
 import { AppContext } from "../../context/AppContext";
 import { TextField, Select, DateField } from "../FormComponents/";
 import { CancelButton, SaveButton } from "./Forms/Buttons";
@@ -8,6 +8,7 @@ import axios from "axios";
 import styled from "styled-components";
 import Swal from "sweetalert2/dist/sweetalert2.js";
 import * as Yup from "yup";
+import { LoadingBackground } from "./LoadingBackground";
 
 const ButtonsContainer = styled.div`
   display: flex;
@@ -25,11 +26,12 @@ const Layout = styled.div`
 export const EditableOperation = (props) => {
   const context = useContext(AppContext);
   const { operation, setEditable } = props;
-
+  const [loading, setLoading] = useState(false);
   const { description, amount, category, type, date, uid } = operation;
   const { refetchOperations, refetchBudget, categories } = context;
 
   const handleSubmit = (formData) => {
+    setLoading(true);
     Swal.fire({
       title: "¿Deseas guardar la edición?",
       icon: "question",
@@ -51,7 +53,7 @@ export const EditableOperation = (props) => {
 
         axios({
           method: "PUT",
-          url: "http://localhost:3001/api/operations",
+          url: "https://budgeit-api.herokuapp.com/api/operations",
           data: {
             ...formattedData,
           },
@@ -79,6 +81,9 @@ export const EditableOperation = (props) => {
               "error"
             );
             console.log(err.response);
+          })
+          .finally(() => {
+            setLoading(false);
           });
       }
     });
@@ -86,6 +91,7 @@ export const EditableOperation = (props) => {
 
   return (
     <Layout>
+      {loading ? <LoadingBackground></LoadingBackground> : null}
       <Formik
         initialValues={{
           operation_uid: uid,

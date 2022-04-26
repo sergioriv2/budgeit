@@ -34,9 +34,14 @@ const useFetch = (url) => {
   const refetch = useCallback(() => {
     const fetchFunction = async () => {
       try {
-        const response = await axios.get(endpoint);
-        const data = await response?.data;
-        console.log(data);
+        setLoading(true);
+        const response = await axios.get(endpoint, {
+          headers: {
+            "Content-Type": "application/json",
+            "x-api-key": window.localStorage.getItem("token"),
+          },
+        });
+        const data = await response?.data.result;
         setData(data);
       } catch (err) {
         console.log(err);

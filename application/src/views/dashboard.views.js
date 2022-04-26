@@ -121,6 +121,7 @@ export const Dashboard = () => {
         refetchBudget,
         refetchOperations,
         removeToken,
+        categories,
       }}
     >
       <Layout>
