@@ -137,7 +137,7 @@ export const DeleteButton = (props) => {
       if (result.isConfirmed) {
         axios({
           method: "DELETE",
-          url: "http://localhost:3001/api/operations",
+          url: "https://budgeit-api.herokuapp.com/api/operations",
           data: {
             operation_uid: uid,
           },
