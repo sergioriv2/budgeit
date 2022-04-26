@@ -53,7 +53,7 @@ const spPutOperation = (params) => {
           .request()
           .input("UID", sql.Int, uid)
           .input("Category", sql.Int, category)
-          .input("Amount", sql.VarChar(50), amount)
+          .input("Amount", sql.Float, amount)
           .input("Description", sql.VarChar(50), description)
           .input("DateOperation", sql.DateTime, date)
           .execute("spPutOperation", (error, result) => {
